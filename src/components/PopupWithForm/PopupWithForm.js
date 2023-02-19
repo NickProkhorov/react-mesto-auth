@@ -8,7 +8,7 @@ function PopupWithForm(props) {
                 <form className="popup__form" name={props.name} onSubmit={props.onSubmit} noValidate>
                         {props.children}
                     <fieldset className="popup__handlers">
-                        <input type="submit" id="confirmDelCard" value={props.submitValue} className="popup__button popup__button_type_confirm"/>
+                        <input type="submit" id={`confirm${props.name}`} value={props.submitValue} className="popup__button popup__button_type_confirm"/>
                     </fieldset>    
                 </form>
                 <button className="popup__closed" type="button" onClick={props.onClose}></button> 

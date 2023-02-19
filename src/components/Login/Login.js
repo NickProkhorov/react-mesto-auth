@@ -22,7 +22,6 @@ function Login(props){
         if( !userData.email || !userData.password){
             return;
         }
-        console.log(`login:${userData}`);
         props.handleLogin({password: userData.password, email: userData.email});
     }
 

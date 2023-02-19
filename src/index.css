@@ -70,6 +70,8 @@
 @import url(./blocks/popup/__question-register/popup__question-register.css);
 @import url(./blocks/popup/__to-login/popup__to-login.css);
 @import url(./blocks/popup/__note/popup__note.css);
+@import url(./blocks/popup/__container/_infotool/popup__container_infotool.css);
+@import url(./blocks/popup/__heading/_infotool/popup__heading_infotool.css);
 
 
 

@@ -1,8 +1,14 @@
-.popup__container {
+.popup__container_infotool {
     max-width: 430px;
+    min-height: 330px;
     background-color: #FFFFFF;
     border-radius: 10px;
     position: relative;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 @media screen and (max-width: 492px) {

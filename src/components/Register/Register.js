@@ -20,7 +20,6 @@ function Register(props){
 
     function handleSubmit(e){
         e.preventDefault();
-        console.log(`register:${userData}`);
         props.handleRegister({email: userData.email, password: userData.password});
     }
 
