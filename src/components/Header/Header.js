@@ -6,7 +6,7 @@ function Header({userCheckData, signOut}) {
             <div className="header__logo"></div>
             
                 <Routes>
-                    <Route path="/main" element={
+                    <Route path="/" element={
                         <div className="header__profile-data">
                             <p className="header__profile-email">{userCheckData.email}</p>
                             <Link to='/sign-in' className="header__logout" onClick={signOut}>Выйти</Link>
@@ -18,7 +18,9 @@ function Header({userCheckData, signOut}) {
                         </div>
                     }/>
                     <Route path="/sign-up" element={
-                        <Link to='/sign-in' className="header__logout">Войти</Link>
+                        <div className="header__profile-data">
+                            <Link to='/sign-in' className="header__logout">Войти</Link>
+                        </div>
                     }/>
                 </Routes>
                 

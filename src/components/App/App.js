@@ -25,7 +25,6 @@ function App() {
   const [tooltipMessage, setTooltipMessage] = useState('');
   const [authResult, setAuthResult] = useState();
   
-  
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
@@ -36,12 +35,12 @@ function App() {
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = useState(false);
 
   const [ userCheckData, setUserCheckData ] = useState({userId:"", email:""});
-
   const navigate = useNavigate();
   
-
   useEffect(() => {
-    api.getAllPageData()
+    if (loggedIn){
+      api
+        .getAllPageData()
         .then((res) => {
           const [profileData, allCards ] = res
           setCurrentUser(profileData);
@@ -50,22 +49,39 @@ function App() {
         .catch((error) => {
           console.log(`Ошибка при загрузке исходных данных: ${error}`);
         })
-
-    tokenCheck();    
+    }
         
-  }, []);
+  }, [loggedIn]);
 
-  function tokenCheck(){ 
+  useEffect(() => {
     const jwt = JSON.parse(localStorage.getItem('jwt'));
     if(jwt){
-      auth.checkToken(jwt)
-      .then((res)=>{
-        setLoggedIn(true);
-        setUserCheckData({
+      auth.checkToken(jwt) 
+      .then((res)=>{ 
+        setUserCheckData({ 
           userId: res.data._id,
           email: res.data.email
         });
-        navigate("/main");
+        setLoggedIn(true);  
+        navigate("/"); 
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
+    }
+  }, [navigate]);
+
+  function tokenCheck(){
+    const jwt = JSON.parse(localStorage.getItem('jwt'));
+    if(jwt){
+      auth.checkToken(jwt) 
+      .then((res)=>{ 
+        setUserCheckData({ 
+          userId: res.data._id,
+          email: res.data.email
+        });
+        setLoggedIn(true);  
+        navigate("/"); 
       })
       .catch((error)=>{
         console.log(error);
@@ -75,11 +91,11 @@ function App() {
   
   function handleLogin(userData) { 
     return auth.authorize(userData)
-        .then((data) => {
+        .then((data) => { 
+            console.log(data);
             if (data.token) {
-                localStorage.setItem('jwt', JSON.stringify(data.token));
-                setLoggedIn(true);
-                navigate('/main');
+                localStorage.setItem('jwt', JSON.stringify(data.token)); 
+                tokenCheck();
             }
         })
         .catch((error) => {
@@ -131,7 +147,6 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setIsInfoTooltipOpen(false);
     setSelectedCard(null);
-
   }
 
   function handleCardLike(card){
@@ -205,10 +220,9 @@ function App() {
           <CurrentUserContext.Provider value={currentUser}>
             <Header loggedIn={loggedIn} userCheckData={userCheckData} signOut={signOut}/>
             <Routes>
-              <Route path="/" element ={loggedIn ? <Navigate to="/main" /> : <Navigate to="/sign-up" />}/>
               <Route path="/sign-in" element ={<Login title="Вход" name="login" submitValue="Войти" handleLogin={handleLogin} />}/>
               <Route path="/sign-up" element ={<Register title="Регистрация" name="register" submitValue="Зарегистрироваться" handleRegister={handleRegister}/>}/>
-              <Route path="/main" element={
+              <Route path="/" element={
                 <ProtectedRoute
                   element={Main}
                   loggedIn={loggedIn} 
@@ -222,7 +236,7 @@ function App() {
                   onCardDelete={handleCardDelete} />
                 } 
               />
-                         
+               <Route path="*" element ={loggedIn ? <Navigate to="/" /> : <Navigate to="/sign-up" />}/>             
             </Routes>
             <PopupWithForm  title="Вы уверены?" name="confirmation" isOpen={false} submitValue="Да"/>
             <EditAvatarPopup 
