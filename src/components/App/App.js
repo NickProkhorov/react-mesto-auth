@@ -54,7 +54,7 @@ function App() {
   }, [loggedIn]);
 
   useEffect(() => {
-    const jwt = JSON.parse(localStorage.getItem('jwt'));
+    const jwt = localStorage.getItem('jwt');
     if(jwt){
       auth.checkToken(jwt) 
       .then((res)=>{ 
@@ -72,7 +72,7 @@ function App() {
   }, [navigate]);
 
   function tokenCheck(){
-    const jwt = JSON.parse(localStorage.getItem('jwt'));
+    const jwt = localStorage.getItem('jwt');
     if(jwt){
       auth.checkToken(jwt) 
       .then((res)=>{ 
@@ -91,10 +91,9 @@ function App() {
   
   function handleLogin(userData) { 
     return auth.authorize(userData)
-        .then((data) => { 
-            console.log(data);
-            if (data.token) {
-                localStorage.setItem('jwt', JSON.stringify(data.token)); 
+        .then((res) => {
+            if (res.token) {
+                localStorage.setItem('jwt', res.token); 
                 tokenCheck();
             }
         })
